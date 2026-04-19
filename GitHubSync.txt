@@ -21,7 +21,8 @@ Whenever you modify app.py or index.html in the future, use this "Three-Step" wo
 Stage your changes:
 git add .
 
-Label your update:git commit -m "Modified EMA logic and sidebar time styling"
+Label your update:
+git commit -m "Modified EMA logic, Telegram status and sidebar time styling"
 
 Push to GitHub:
 git push origin main
@@ -38,3 +39,29 @@ settings.py					Hidden (Kept safe on your local machine only)
 Expert Tip:
 
 If you want to track which version of the strategy performs better, use Git Tags. For example, run git tag -a v1.0-EMA5-20 -m "Stable 5/20 version" so you can always revert to this exact point if future modifications don't work as expected.
+
+
+Example:
+
+
+E:\AI\paper\paper_new>git add .
+
+E:\AI\paper\paper_new>git commit -m "Modified EMA logic, Telegram status and sidebar time styling"
+[main 0dde920] Modified EMA logic, Telegram status and sidebar time styling
+ 4 files changed, 164 insertions(+), 124 deletions(-)
+ create mode 100644 GitHubSync.txt
+
+E:\AI\paper\paper_new>git push origin main
+Enumerating objects: 12, done.
+Counting objects: 100% (12/12), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (7/7), 3.97 KiB | 3.97 MiB/s, done.
+Total 7 (delta 3), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+To https://github.com/anandyg/FIXSTRA.git
+   a0e4d99..0dde920  main -> main
+
+E:\AI\paper\paper_new>git tag -a v1.0-EMA5-20 -m "Stable 5/20 version"
+
+E:\AI\paper\paper_new>
