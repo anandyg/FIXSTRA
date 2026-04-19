@@ -1,0 +1,40 @@
+To sync your updated FIXSTRA project to your GitHub account (anandyg), follow these steps in your terminal from your project directory (E:\AI\paper\paper_new). Since you have already initialized the repository with git init, you just need to commit your latest changes and push them to the cloud.1. Security First: The .gitignoreBefore pushing, ensure your sensitive API keys and tokens in settings.py are not uploaded to a public repository.Create a file named .gitignore in your root folder:Plaintextsettings.py
+__pycache__/
+*.pyc
+.env
+2. Initial Sync (If not yet pushed)If you haven't linked your local folder to GitHub yet, run these commands:Bash# 1. Add your modified files
+git add .
+
+# 2. Commit the changes
+git commit -m "Update FIXSTRA: EMA 5/20 logic with Closing Basis and blue UI labels"
+
+# 3. Link to your GitHub (Ensure you created a repo named 'FIXSTRA' on github.com first)
+git remote add origin https://github.com/anandyg/FIXSTRA.git
+
+# 4. Set the branch and push
+git branch -M main
+git push -u origin main
+
+3. Syncing Modifications (Ongoing Updates):
+Whenever you modify app.py or index.html in the future, use this "Three-Step" workflow to sync:
+
+Stage your changes:
+git add .
+
+Label your update:git commit -m "Modified EMA logic and sidebar time styling"
+
+Push to GitHub:
+git push origin main
+
+4. Repository ChecklistOnce the sync is complete, your GitHub account (anandyg) will showcase a professional trading desk with the following structure:
+
+File						Status
+app.py						Synced (Contains the latest 5/20 crossover logic)
+templates/index.html		Synced (Contains the professional dark/blue/yellow UI)
+README.md					Recommended (Use the template I provided earlier)
+settings.py					Hidden (Kept safe on your local machine only)
+
+
+Expert Tip:
+
+If you want to track which version of the strategy performs better, use Git Tags. For example, run git tag -a v1.0-EMA5-20 -m "Stable 5/20 version" so you can always revert to this exact point if future modifications don't work as expected.

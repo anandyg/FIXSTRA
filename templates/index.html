@@ -15,16 +15,17 @@
     .main-wrapper { margin-left: 240px; padding: 40px; }
     .summary-card { background: var(--card-bg); border-radius: 12px; padding: 25px; border: 1px solid var(--border); margin-bottom: 20px; text-align: center; }
     .market-watch-card { background: #24283b; border: 1px solid var(--border); border-radius: 10px; padding: 15px; text-align: center; }
+    
+    /* Blue Background Labels */
     .label-blue-bg { background-color: var(--accent); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-block; }
+    
     .bright-val { font-weight: 700; color: #fff; }
     .market-watch-card .bright-val { color: var(--yellow) !important; }
     .pnl-pos { color: var(--success); } .pnl-neg { color: var(--danger); }
     .table thead th { color: #9194a7; font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
     .table tbody td { padding: 15px; border-bottom: 1px solid #24283b; vertical-align: middle; }
-    
-    /* Type Badges */
-    .badge-buy { background: rgba(80, 205, 137, 0.15); color: var(--success); border: 1px solid var(--success); }
-    .badge-sell { background: rgba(241, 65, 108, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+    .badge-buy { background: rgba(80, 205, 137, 0.1); color: var(--success); border: 1px solid var(--success); }
+    .badge-sell { background: rgba(241, 65, 108, 0.1); color: var(--danger); border: 1px solid var(--danger); }
   </style>
 </head>
 <body>
@@ -36,8 +37,10 @@
     <div style="margin-top: 100px;">
         <div class="small text-muted mb-2 text-uppercase fw-bold">Telegram System</div>
         <div id="tg-status-badge" class="badge w-100 mb-4 p-2">Inactive</div>
-        <button class="btn btn-primary w-100 fw-bold mb-3" onclick="toggleMode()">SWITCH MODE</button>
-        <div class="small text-muted text-center" id="last-update">00:00:00</div>
+        
+        <div class="text-center">
+            <div id="last-update" class="label-blue-bg w-100" style="font-family: monospace; letter-spacing: 1px;">00:00:00</div>
+        </div>
     </div>
   </div>
 
@@ -48,41 +51,26 @@
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-md-4"><div class="summary-card"><div class="mb-3"><span class="label-blue-bg">Total Investment</span></div><div class="h4 bright-val" id="total-inv">₹ 0.00</div></div></div>
-        <div class="col-md-4"><div class="summary-card"><div class="mb-3"><span class="label-blue-bg">Current Value</span></div><div class="h4 bright-val" id="current-val">₹ 0.00</div></div></div>
-        <div class="col-md-4"><div class="summary-card"><div class="mb-3"><span class="label-blue-bg">Profit/Loss</span></div><div class="h4 bright-val" id="total-pnl">₹ 0.00</div></div></div>
+        <div class="col-md-4"><div class="summary-card"><div class="mb-3"><span class="label-blue-bg">Total Investment</span></div><div class="h4 text-white fw-bold" id="total-inv">₹ 0.00</div></div></div>
+        <div class="col-md-4"><div class="summary-card"><div class="mb-3"><span class="label-blue-bg">Current Value</span></div><div class="h4 text-white fw-bold" id="current-val">₹ 0.00</div></div></div>
+        <div class="col-md-4"><div class="summary-card"><div class="mb-3"><span class="label-blue-bg">Profit/Loss</span></div><div class="h4 text-white fw-bold" id="total-pnl">₹ 0.00</div></div></div>
     </div>
 
     <div class="summary-card">
-        <div class="d-flex justify-content-between align-items-center mb-4"><div class="label-blue-bg">Market Watch (1s Refresh)</div><div class="small text-muted">Mode: <span id="current-mode-display" class="text-primary fw-bold">--</span></div></div>
+        <div class="label-blue-bg mb-4">Market Watch (1s Refresh)</div>
         <div class="row g-3" id="watch-grid"></div>
     </div>
 
     <div class="summary-card text-start">
         <table class="table table-dark table-borderless m-0">
-            <thead>
-                <tr>
-                    <th>Symbols</th>
-                    <th>Exchange</th>
-                    <th>Type</th> <th>Avg. Cost</th>
-                    <th>LTP</th>
-                    <th>P&L</th>
-                </tr>
-            </thead>
+            <thead><tr><th>TIME</th><th>SYMBOLS</th><th>TYPE</th><th>AVG. COST</th><th>LTP</th><th>P&L</th></tr></thead>
             <tbody id="position-body"></tbody>
         </table>
     </div>
   </div>
 
 <script>
-    let activeMode = "CRYPTO";
     const ws = new WebSocket(`ws://${window.location.host}/ws`);
-
-    async function toggleMode() {
-        activeMode = (activeMode === "CRYPTO") ? "INDIAN" : "CRYPTO";
-        await fetch('/switch_mode', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({mode: activeMode}) });
-    }
-
     ws.onmessage = (event) => {
         try {
             const d = JSON.parse(event.data);
@@ -90,7 +78,7 @@
 
             document.getElementById('market-status').innerText = d.market_status;
             document.getElementById('last-update').innerText = d.last_update;
-            document.getElementById('current-mode-display').innerText = d.mode;
+            
             const tgBadge = document.getElementById('tg-status-badge');
             tgBadge.innerText = d.telegram_status;
             tgBadge.className = d.telegram_status === "Active" ? "badge bg-success w-100 mb-4 p-2" : "badge bg-danger w-100 mb-4 p-2";
@@ -98,42 +86,35 @@
             document.getElementById('total-inv').innerText = `₹ ${fmt(d.total_investment)}`;
             document.getElementById('current-val').innerText = `₹ ${fmt(d.current_value)}`;
             
-            // Total PnL Combined
             const pnlEl = document.getElementById('total-pnl');
             const totalPnL = d.total_pnl_combined || 0;
             pnlEl.innerText = `₹ ${fmt(totalPnL)}`;
-            pnlEl.className = totalPnL >= 0 ? 'h4 bright-val pnl-pos' : 'h4 bright-val pnl-neg';
+            pnlEl.className = totalPnL >= 0 ? 'h4 text-success fw-bold' : 'h4 text-danger fw-bold';
 
-            // Market Watch Updates
             const grid = document.getElementById('watch-grid');
             grid.innerHTML = Object.entries(d.live_prices).map(([sym, price]) => {
                 const open = d.open_prices[sym] || price;
                 const change = open > 0 ? ((price - open) / open * 100).toFixed(2) : "0.00";
-                return `<div class="col-md-2 col-6"><div class="market-watch-card"><div class="mb-2"><span class="label-blue-bg">${sym}</span></div><div class="h6 bright-val m-0">${fmt(price)}</div><div class="small ${change >= 0 ? 'pnl-pos' : 'pnl-neg'}">(${change}%)</div></div></div>`;
+                return `<div class="col-md-2 col-6"><div class="market-watch-card"><div class="mb-2"><span class="label-blue-bg">${sym}</span></div><div class="h6 bright-val m-0">${fmt(price)}</div><div class="small ${change >= 0 ? 'text-success' : 'text-danger'}">(${change}%)</div></div></div>`;
             }).join('');
 
-            // Positions Table Update (With Type Column)
             const tbody = document.getElementById('position-body');
             const active = d.trades ? d.trades.filter(t => t.exit === "OPEN") : [];
             if (active.length > 0) {
                 tbody.innerHTML = active.map(t => {
                     const lp = d.live_prices[t.symbol] || t.entry;
                     const pnlVal = (t.type === 'BUY' ? (lp - t.entry) : (t.entry - lp));
-                    const typeClass = t.type === 'BUY' ? 'badge-buy' : 'badge-sell';
-                    
-                    return `
-                        <tr>
-                            <td class="fw-bold">${t.symbol}</td>
-                            <td><span class="badge bg-dark text-muted" style="font-size:0.6rem;">${t.symbol.includes('USDT')?'BINANCE':'NSE'}</span></td>
-                            <td><span class="badge ${typeClass} p-2">${t.type}</span></td> <td>₹ ${fmt(t.entry)}</td>
-                            <td class="${pnlVal >= 0 ? 'pnl-pos' : 'pnl-neg'}">₹ ${fmt(lp)}</td>
-                            <td class="fw-bold ${pnlVal >= 0 ? 'pnl-pos' : 'pnl-neg'}">₹ ${fmt(pnlVal)}</td>
-                        </tr>`;
+                    return `<tr>
+                        <td>${t.time}</td>
+                        <td class="fw-bold">${t.symbol}</td>
+                        <td><span class="badge ${t.type === 'BUY' ? 'badge-buy' : 'badge-sell'} p-2">${t.type}</span></td>
+                        <td>₹ ${fmt(t.entry)}</td>
+                        <td class="${pnlVal>=0?'text-success':'text-danger'}">₹ ${fmt(lp)}</td>
+                        <td class="fw-bold ${pnlVal>=0?'text-success':'text-danger'}">₹ ${fmt(pnlVal)}</td>
+                    </tr>`;
                 }).join('');
-            } else {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-muted">No active ${d.mode} positions.</td></tr>`;
-            }
-        } catch (e) { console.error("UI Update Error:", e); }
+            } else { tbody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-muted">No active positions.</td></tr>`; }
+        } catch (e) { console.error("Update Error:", e); }
     };
 </script>
 </body>

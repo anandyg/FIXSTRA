@@ -1,33 +1,50 @@
-# NIFTY Options Strategy Bot
+# FIXSTRA | Pro Algorithmic Trading Desk
 
-A high-frequency real-time trading dashboard and automated strategy bot for NIFTY 50 and BANK NIFTY indices. This application uses FastAPI for a high-performance asynchronous backend and WebSockets for zero-latency UI updates.
+FIXSTRA is a high-performance, real-time algorithmic trading dashboard built with **FastAPI** and **WebSockets**. It is designed for paper trading both Indian Equity (via Zerodha Kite) and Crypto markets (via Binance), featuring a professional high-contrast UI and automated strategy execution.
 
-## Features
+## 🚀 Key Features
 
-- **1-Second Ticking**: Real-time market data updates every second.
-- **State-Based Execution**: Advanced logic to ensure trades are executed even if the exact crossover tick is missed.
-- **Dynamic Indicator Detection**: Robust handling of technical indicator column names to prevent system crashes (fixes SUPERTd KeyError).
-- **Real-time PnL Tracking**: Live monitoring of Profit and Loss for active positions.
-- **Automated Alerts**: Integration with Telegram for instant signal notifications.
-- **Professional Dashboard**: Dark-themed, responsive UI with price pulsing and execution history.
+* **Real-Time Market Watch**: 1-second refresh grid with daily percentage change and color-coded volatility.
+* **Dual Mode Connectivity**: Seamlessly switch between Crypto (Binance WebSocket) and Indian Markets (Kite Ticker).
+* **Automated Strategy Engine**: Implements a high-precision EMA 5/20 crossover strategy on a 1-minute closing basis.
+* **Telegram Integration**: Instant alerts for system startup, new trade entries, and profit/loss exits.
+* **Live Portfolio Tracking**: Real-time calculation of Total Investment, Current Value, and Combined P&L.
 
-## Technical Stack
+---
 
-- **Backend**: Python 3.12, FastAPI, Uvicorn
-- **Data Analysis**: Pandas, Pandas_TA
-- **Data Source**: Yahoo Finance (`yfinance`)
-- **Frontend**: HTML5, CSS3, JavaScript (WebSockets)
+## 📈 Strategy: EMA 5/20 Closing Basis
 
-## Strategy Parameters
+The engine utilizes an Exponential Moving Average (EMA) crossover logic optimized for 1-minute intervals:
 
-The bot utilizes a multi-indicator confirmation strategy:
-- **EMA Crossover**: Fast EMA (9) and Slow EMA (26).
-- **SuperTrend**: Trend following indicator (10 period, 3 multiplier).
-- **Execution**: Signal is generated when EMA and SuperTrend align in the same direction and the state changes.
+* **BUY Signal**: Triggered when the **EMA 5** crosses above the **EMA 20** AND the 1-minute candle closes strictly above both averages.
+* **SELL Signal**: Triggered when the **EMA 5** crosses below the **EMA 20** AND the 1-minute candle closes strictly below both averages.
+* **Exit Rules**:
+    * **Stop Loss (SL)**: 0.5%.
+    * **Take Profit (TP)**: 1.0%.
+    * **Reverse Exit**: Immediate closure if a signal in the opposite direction is detected.
 
-## Installation
+---
 
-1. **Clone the project** to your local directory (e.g., `E:\AI\paper`).
-2. **Install dependencies**:
-   ```bash
-   pip install fastapi uvicorn pandas_ta yfinance httpx python-dotenv jinja2
+## 🛠️ Installation
+
+1.  **Clone the Repository**:
+    ```bash
+    git clone [https://github.com/anandyg/FIXSTRA.git](https://github.com/anandyg/FIXSTRA.git)
+    cd FIXSTRA
+    ```
+
+2.  **Install Dependencies**:
+    ```bash
+    pip install fastapi uvicorn pandas pandas_ta kiteconnect aiohttp jinja2
+    ```
+
+3.  **Configuration**:
+    Create a `settings.py` file (excluded from Git for security) and populate your API credentials and Telegram tokens.
+
+---
+
+## 🖥️ Usage
+
+Run the server using Uvicorn:
+```bash
+python -m uvicorn app:app --port 5678 --reload"# FIXSTRA" 
