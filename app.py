@@ -34,7 +34,31 @@ state = {
     "last_processed_min": {s: -1 for s in ALL_WATCH}
 }
 
-# --- 3. CONNECTION MANAGER ---
+# # --- 3. CONNECTION MANAGER ---
+# class ConnectionManager:
+    # def __init__(self):
+        # self.active_connections: list[WebSocket] = []
+
+    # async def connect(self, websocket: WebSocket):
+        # await websocket.accept()
+        # self.active_connections.append(websocket)
+
+    # def disconnect(self, websocket: WebSocket):
+        # if websocket in self.active_connections:
+            # self.active_connections.remove(websocket)
+
+    # async def broadcast(self, message: dict):
+        # for connection in self.active_connections:
+            # try:
+                # await connection.send_json(message)
+            # except Exception:
+                # self.active_connections.remove(connection)
+
+# manager = ConnectionManager()
+
+
+
+# --- 3. CONNECTION MANAGER (REINFORCED) ---
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
@@ -42,19 +66,25 @@ class ConnectionManager:
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.active_connections.append(websocket)
+        logger.info(f"New WebSocket connection. Total: {len(self.active_connections)}")
 
     def disconnect(self, websocket: WebSocket):
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
+            logger.info(f"Connection removed. Remaining: {len(self.active_connections)}")
 
     async def broadcast(self, message: dict):
-        for connection in self.active_connections:
+        # We iterate over a copy [:] to avoid issues if the list changes during broadcast
+        for connection in self.active_connections[:]:
             try:
                 await connection.send_json(message)
             except Exception:
-                self.active_connections.remove(connection)
+                # Use the disconnect method which already has the "if in list" check
+                self.disconnect(connection)
 
 manager = ConnectionManager()
+
+
 
 # --- 4. TELEGRAM & SCHEDULER LOGIC ---
 async def send_telegram_msg(msg):
