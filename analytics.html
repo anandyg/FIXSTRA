@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FIXSTRA | Performance Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Trading Performance</h1>
+        <div class="metrics-grid">
+            <div class="metric-card">Win Rate: <span id="win-rate">0%</span></div>
+            <div class="metric-card">Profit Factor: <span id="profit-factor">0.0</span></div>
+            <div class="metric-card">Expectancy: <span id="expectancy">0.0</span></div>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="equityChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        async function loadAnalytics() {
+            const response = await fetch('/api/analytics');
+            const data = await response.json();
+
+            // Update Metrics
+            document.getElementById('win-rate').innerText = data.win_rate.toFixed(1) + '%';
+            document.getElementById('profit-factor').innerText = data.profit_factor.toFixed(2);
+            document.getElementById('expectancy').innerText = data.expectancy.toFixed(2);
+
+            // Render Chart
+            const ctx = document.getElementById('equityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.dates,
+                    datasets: [{
+                        label: 'Cumulative PnL (₹)',
+                        data: data.equity_curve,
+                        borderColor: '#00ff41',
+                        backgroundColor: 'rgba(0, 255, 65, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: false } } }
+            });
+        }
+        loadAnalytics();
+    </script>
+</body>
+</html>

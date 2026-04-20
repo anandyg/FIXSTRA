@@ -1,0 +1,105 @@
+Act as a senior frontend engineer and UI/UX designer.
+
+Your task is to redesign my existing web application UI to exactly match the provided reference design (dark themed trading dashboard), while strictly following these constraints:
+
+🔒 CRITICAL RULE:
+- DO NOT modify any backend logic, APIs, data flow, or business logic.
+- Only update frontend (UI/UX, layout, styling).
+- All existing functionality, IDs, state management, and event handlers must remain intact.
+
+🎨 DESIGN REQUIREMENTS:
+
+1. Overall Theme:
+- Dark, premium trading dashboard style
+- Gradient accents (purple/pink/blue tones)
+- Smooth shadows, soft borders, rounded cards (12–16px radius)
+- Glassmorphism + subtle glow effects
+
+2. Layout Structure:
+- Left vertical sidebar navigation:
+  - Logo/title at top (e.g., "NIFTY BOT")
+  - Menu items: Overview, Signals, Performance, Settings
+  - Active tab highlighted with gradient pill background
+
+- Main dashboard area:
+  - Top header with:
+    - Strategy title: "EMA + Supertrend NIFTY Options"
+    - Status badges (Telegram Error, Live Session, etc.)
+
+3. Cards / Widgets:
+- Use modular card components with:
+  - Soft border
+  - Slight inner glow
+  - Padding (16–24px)
+
+- Sections to include:
+  a) Current Signal Card
+     - Signal status (NONE / BUY / SELL)
+     - Trend indicator badge (SIDE / UP / DOWN)
+     - Entry, LTP, Symbol
+     - Reason text box (rounded pill style)
+
+  b) PnL Card
+     - Unrealized PnL
+     - Minimal clean typography
+
+  c) Last Update Card
+     - Timestamp / heartbeat text
+
+4. Live Indices Section:
+- Title: "NIFTY · BANKNIFTY · GIFT NIFTY"
+- 3 horizontal cards:
+  - NIFTY 50
+  - BANKNIFTY
+  - GIFT NIFTY
+- Each card shows LTP with placeholder "--" if no data
+
+5. Recent Trades Table:
+- Section title: "Executed positions & reasons"
+- Columns:
+  - Time | Side | Symbol | Entry Reason | Exit Reason | Entry | Exit | PnL
+- Minimal grid lines
+- Subtle hover effect
+
+6. Typography:
+- Clean modern font (Inter / Poppins)
+- Use hierarchy:
+  - Headings: bold, larger
+  - Labels: small, muted
+  - Values: bright white
+
+7. Colors:
+- Background: deep navy/black gradient
+- Cards: slightly lighter dark tone
+- Accent: purple → pink gradient
+- Text:
+  - Primary: white
+  - Secondary: gray
+  - Status:
+    - Green = profit/buy
+    - Red = loss/sell
+    - Yellow = neutral/wait
+
+8. Micro-interactions:
+- Smooth hover transitions (0.2–0.3s)
+- Button/Tab hover glow
+- Subtle loading placeholders
+
+9. Responsiveness:
+- Desktop-first design
+- Maintain structure on large screens
+- Stack cards vertically on smaller screens
+
+⚙️ TECH STACK:
+- Use React + Tailwind CSS (preferred)
+OR adapt to existing framework (do NOT change architecture)
+- Reuse existing components where possible, only restyle
+
+📦 OUTPUT:
+- Clean, production-ready frontend code
+- Reusable components (Sidebar, Card, Table, Badge)
+- No mock data changes
+- No API changes
+
+🎯 GOAL:
+Match the provided UI visually as close as possible (pixel-perfect feel), while keeping the application logic 100% unchanged.

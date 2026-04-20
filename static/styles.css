@@ -1,0 +1,45 @@
+:root { 
+    --body-bg: #1a1b26; --sidebar-bg: #13141f; --card-bg: #2b2f42; 
+    --border: #343a50; --accent: #3699ff; --success: #50cd89; 
+    --danger: #f1416c; --warning: #ffb800; --yellow: #ffeb3b; 
+}
+body { background: var(--body-bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; }
+.sidebar { width: 240px; background: var(--sidebar-bg); min-height: 100vh; position: fixed; top: 0; left: 0; padding: 25px; border-right: 1px solid var(--border); }
+.nav-item { color: #9194a7; display: flex; align-items: center; padding: 12px 15px; text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+.nav-item.active { color: #fff; background: #1e202e; border-radius: 8px; position: relative; }
+.nav-item.active::after { content: ''; position: absolute; left: 0; height: 100%; width: 4px; background: var(--accent); }
+.main-wrapper { margin-left: 240px; padding: 40px; }
+.summary-card { background: var(--card-bg); border-radius: 12px; padding: 25px; border: 1px solid var(--border); margin-bottom: 20px; text-align: center; }
+.label-blue-bg { background-color: var(--accent); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+.watch-card { background: #24283b; border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+.heartbeat-dot { height: 8px; width: 8px; background-color: var(--success); border-radius: 50%; display: inline-block; margin-right: 8px; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(80, 205, 137, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(80, 205, 137, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(80, 205, 137, 0); } }
+.status-warning { background-color: var(--warning) !important; animation: pulse-warning 1.5s infinite; }
+@keyframes pulse-warning { 0% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 184, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 184, 0, 0); } }
+.table { color: #fff !important; }
+.table thead th { color: #9194a7; font-size: 0.75rem; border-bottom: 1px solid var(--border); }
+
+
+
+/* Target the Instrument Labels (NIFTY 50, SBIN, etc.) */
+.watch-card .text-muted {
+    background-color: #3699ff !important; /* FIXSTRA Corporate Blue */
+    color: #ffffff !important;           /* White text for visibility */
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Ensure the main section headers remain blue */
+.label-blue-bg {
+    background-color: #3699ff !important;
+    color: #ffffff !important;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}

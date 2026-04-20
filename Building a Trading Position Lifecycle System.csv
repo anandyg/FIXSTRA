@@ -1,0 +1,5 @@
+Metric,Calculation,Purpose
+Win Rate,(Winning Trades / Total Trades) * 100,Statistical reliability
+Profit Factor,Gross Profit / Gross Loss,Overall system efficiency
+Sharpe Ratio,(Mean Return−Risk Free Rate)/Std Dev,Risk-adjusted performance
+Max Drawdown,Peak to Trough decline,Survival risk

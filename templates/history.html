@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FIXSTRA | History Vault</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="h3 fw-bold mb-5 text-center">FIXSTRA</div>
+    <a href="/" class="btn btn-outline-secondary w-100 mb-3"><i class="fa-solid fa-arrow-left me-2"></i>Back to Live</a>
+    <div class="label-blue-bg w-100 text-center">HISTORY VIEW</div>
+  </div>
+
+  <div class="main-wrapper">
+    <div class="summary-card mb-4">
+        <div class="row align-items-end g-3">
+            <div class="col-md-4"><label class="small text-muted fw-bold mb-1">START DATE</label><input type="date" id="start-date" class="form-control bg-dark text-white border-secondary"></div>
+            <div class="col-md-4"><label class="small text-muted fw-bold mb-1">END DATE</label><input type="date" id="end-date" class="form-control bg-dark text-white border-secondary"></div>
+            <div class="col-md-4"><button onclick="loadVault()" class="btn btn-primary w-100"><i class="fa-solid fa-filter me-2"></i>Filter CSV</button></div>
+        </div>
+    </div>
+
+    <div class="summary-card text-start"><div class="label-blue-bg mb-3">CSV Trade Audit</div>
+        <table class="table table-dark table-striped m-0">
+            <thead><tr><th>TIMESTAMP</th><th>SYMBOL</th><th>SIDE</th><th>QTY</th><th>PRICE</th><th>TYPE</th><th>P&L</th></tr></thead>
+            <tbody id="vault-body"></tbody>
+        </table>
+    </div>
+  </div>
+
+<script>
+    async function loadVault() {
+        const s = document.getElementById('start-date').value;
+        const e = document.getElementById('end-date').value;
+        const resp = await fetch(`/api/history?start=${s}&end=${e}`);
+        const data = await resp.json();
+        const fmt = (v) => v ? v.toLocaleString('en-IN', {minimumFractionDigits: 2}) : "0.00";
+        
+        document.getElementById('vault-body').innerHTML = data.map(t => `
+            <tr>
+                <td class="small text-muted">${t.Timestamp}</td>
+                <td class="fw-bold">${t.Symbol}</td>
+                <td><span class="badge ${t.Side === 'BUY' ? 'bg-success':'bg-danger'}">${t.Side}</span></td>
+                <td>${t.Qty}</td>
+                <td>₹ ${fmt(t.Price)}</td>
+                <td>${t.Type}</td>
+                <td class="fw-bold ${t.PnL >= 0 ? 'text-success':'text-danger'}">₹ ${fmt(t.PnL)}</td>
+            </tr>`).join('') || '<tr><td colspan="7" class="text-center py-4 text-muted">No historical data found.</td></tr>';
+    }
+    window.onload = loadVault;
+</script>
+</body>
+</html>
